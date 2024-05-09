@@ -16,7 +16,8 @@ import java.util.Scanner;
  * Date:
  */
 public class BMSearch {
-    private static String pattern; //The skip array.
+    private static String[] pattern; //The skip array.
+    private static String line;
     private static Map<String, int[]> skipArray;
 
     public static void main(String[] args){
@@ -33,7 +34,8 @@ public class BMSearch {
         //Gets the table and text files
         table = trySetFile(args[0]);
         text = trySetFile(args[1]);  
-        parseSkipTable(table);    
+        parseSkipTable(table); 
+        searchFile(text); 
     }
 
     /**Attempts to load a file from the String path 
@@ -62,7 +64,8 @@ public class BMSearch {
         int[] skipArrayLine;
         try{
             Scanner sc = new Scanner(skipFile);
-            pattern = sc.nextLine().substring(1); //Gets pattern minus the first character
+            pattern = sc.nextLine().split(","); //Gets pattern minus the first character
+            printPattern();
             //Creates a new line in the hashmap for each line in the skip array file
             while(sc.hasNext()){
                 line = sc.nextLine().split(",");
@@ -80,14 +83,67 @@ public class BMSearch {
         }
     }
 
-        /**
-     * Tries to find a match for the pattern in the line
-     * @param line the line of text 
-     * @param index the current pointer index | should be 0 on initialisation
+    /**Tries passes each line of the file to the findPattern method
+     * @param file The file to search for the pattern in
      */
-    private static void findPattern(String line, int index){
-        
+    private static void searchFile(File file){   
+        try{
+            Scanner sc = new Scanner(file);
+            while(sc.hasNext()){
+                line = sc.nextLine();
+                findPattern(0);
+            }
+            sc.close();
+        }catch(Exception e){
+            System.err.println("Error: There was a problem finding the pattern");
+            e.printStackTrace(System.err);
+        }
+    }
 
+    /**
+     * A recursive function that will try to find a pattern match in the line or reach the end of the line with no match
+     * @param line the line of text 
+     * @param index the current pointer index | should be the last index of the pattern on initialization
+     */
+    private static void findPattern(int index){
+        //If the end of the line is reaches, return
+        if(index >= (line.length() - 1) - (pattern.length - 2))
+            return;
+        for(int i = pattern.length - 2; i >= 0; i--){
+            String s = line.substring(index + i, index + i + 1);
+            //System.out.printf("Comparing %s and %s", s, pattern[i + 1]);
+            if(pattern[i + 1].compareTo(s) != 0){
+                //int skipN = skipArray.get(s) == null ? skipArray.get(pattern[0])[i - 1] : skipArray.get(s)[i - 1];
+                findPattern(index += skipArray.get(s) == null ? skipArray.get(pattern[0])[i] : skipArray.get(s)[i]);
+                return;
+            }   
+        }
+        System.out.println(line);
+    }
+
+    /**
+     * Checks if the strings match
+     * @param line the line of text
+     * @param patternIndex the current index of the pattern
+     * @param index the index of the line
+     * @return True if the strings match
+     */
+    private static boolean tryMatch(int patternIndex, int index){
+        if(pattern[patternIndex].compareTo(line.substring(index, index)) == 0){
+            return true;
+        }
+        return false;  
+    }
+
+    /**
+     * Prints the pattern to look for to the standard output
+     */
+    private static void printPattern(){
+        System.out.print("Searching for '");
+        for(int i = 0; i < pattern.length; i++){
+            System.out.print(pattern[i]);
+        }
+        System.out.println("'");
     }
 
 
