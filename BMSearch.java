@@ -1,12 +1,5 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.LineNumberReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -16,14 +9,14 @@ import java.util.Scanner;
  * Date:
  */
 public class BMSearch {
-    private static String[] pattern; //The skip array.
-    private static String line;
-    private static Map<String, int[]> skipArray;
+    private static String[] pattern; //The pattern to find in the text.
+    private static String line; //The current line from the text file
+    private static Map<String, int[]> skipArray; //A hashmap of the skip table. String = the String key | int[] the skip array for a given letter
 
     public static void main(String[] args){
         String usage = "java BMSearch table.txt [textfile].txt";
-        File table; //The file containing the skip array.
-        File text; //The text file the string will be searched for in.
+        File table; //The file containing the skip table.
+        File text; //The text file that will be searched in.
 
         //Checks for a valid number of inputs
         if(args.length != 2){
@@ -34,12 +27,14 @@ public class BMSearch {
         //Gets the table and text files
         table = trySetFile(args[0]);
         text = trySetFile(args[1]);  
+        //Parses the skip table
         parseSkipTable(table); 
+        //Searches each line of the text file for the pattern and prints each line with a match to the standard output
         searchFile(text); 
     }
 
-    /**Attempts to load a file from the String path 
-     * @param path the location of the file
+    /**Attempts to load a file from the path 
+     * @param path the path to the file
      * @return a file
      */ 
     private static File trySetFile(String path){
@@ -55,18 +50,18 @@ public class BMSearch {
     }
 
 
-    /**Reads parses the skip table file into the pattern and creates a skipArray hashMap
-     * @param skipFile the file containing the skip array
+    /**Parses the file of skip table into a usable format for the pattern search funtions
+     * @param skipFile the file containing the skip table
      */
     private static void parseSkipTable(File skipFile){
         skipArray = new HashMap<String,int[]>();
-        String[] line;
-        int[] skipArrayLine;
+        String[] line; //The current line of the file
+        int[] skipArrayLine; //The skip array behind the string key
         try{
             Scanner sc = new Scanner(skipFile);
             pattern = sc.nextLine().split(","); //Gets pattern minus the first character
             printPattern();
-            //Creates a new line in the hashmap for each line in the skip array file
+            //Creates a new line in the hashmap for each line in the skip array file. The letter becomes the key and the the numbers an int array
             while(sc.hasNext()){
                 line = sc.nextLine().split(",");
                 skipArrayLine = new int[line.length - 1];
@@ -83,8 +78,8 @@ public class BMSearch {
         }
     }
 
-    /**Tries passes each line of the file to the findPattern method
-     * @param file The file to search for the pattern in
+    /**Passes each line of the file to the search function
+     * @param file The file to search in for the pattern
      */
     private static void searchFile(File file){   
         try{
@@ -101,42 +96,33 @@ public class BMSearch {
     }
 
     /**
-     * A recursive function that will try to find a pattern match in the line or reach the end of the line with no match
-     * @param line the line of text 
-     * @param index the current pointer index | should be the last index of the pattern on initialization
+     * A recursive function that will try to find a pattern match in a String or reach the end of the String with no match
+     * @param line the line of text (String)
+     * @param index the current pointer index | should be initialised at 0
      */
     private static void findPattern(int index){
         //If the end of the line is reaches, return
         if(index >= (line.length() - 1) - (pattern.length - 2))
             return;
+        //compares each letter in the pattern to the letters in the line from the current index
         for(int i = pattern.length - 2; i >= 0; i--){
             String s = line.substring(index + i, index + i + 1);
-            //System.out.printf("Comparing %s and %s", s, pattern[i + 1]);
+            //System.out.printf("Comparing '%s' to '%s'", s, pattern[i + 1]);
+            //If there is a missmatch then the the next function is called
             if(pattern[i + 1].compareTo(s) != 0){
                 //int skipN = skipArray.get(s) == null ? skipArray.get(pattern[0])[i - 1] : skipArray.get(s)[i - 1];
                 findPattern(index += skipArray.get(s) == null ? skipArray.get(pattern[0])[i] : skipArray.get(s)[i]);
                 return;
             }   
         }
+        //A match is found so the line is printed and the method returns
         System.out.println(line);
     }
 
-    /**
-     * Checks if the strings match
-     * @param line the line of text
-     * @param patternIndex the current index of the pattern
-     * @param index the index of the line
-     * @return True if the strings match
-     */
-    private static boolean tryMatch(int patternIndex, int index){
-        if(pattern[patternIndex].compareTo(line.substring(index, index)) == 0){
-            return true;
-        }
-        return false;  
-    }
+
 
     /**
-     * Prints the pattern to look for to the standard output
+     * A debug function that prints the current pattern to look for to the standard output
      */
     private static void printPattern(){
         System.out.print("Searching for '");
@@ -146,6 +132,19 @@ public class BMSearch {
         System.out.println("'");
     }
 
+        // /**
+    //  * Checks if the strings match
+    //  * @param line the line of text
+    //  * @param patternIndex the current index of the pattern
+    //  * @param index the index of the line
+    //  * @return True if the strings match
+    //  */
+    // private static boolean tryMatch(int patternIndex, int index){
+    //     if(pattern[patternIndex].compareTo(line.substring(index, index)) == 0){
+    //         return true;
+    //     }
+    //     return false;  
+    // }
 
     // /**
     //  * Creates a skip array from a file
