@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**Searches for a string pattern in a text file and outputs each line that the string occurs on to the standard output
  * @author Dolf ten Have
  * SID: 1617266
- * Date:
+ * Date: 09/05/2024
  */
 public class BMSearch {
     private static String[] pattern; //The pattern to find in the text.
@@ -132,7 +132,7 @@ public class BMSearch {
         System.out.println("'");
     }
 
-        // /**
+    // /**
     //  * Checks if the strings match
     //  * @param line the line of text
     //  * @param patternIndex the current index of the pattern
