@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
  * https://stackoverflow.com/questions/54671799/how-to-sort-and-eliminate-the-duplicates-from-arraylist/54671928
  * 
  * @author: Samuel Tan
- * Student ID: 1617175
+ * Student ID: 1617175, 1617266
+ * Date: 
  */
 public class MakeBMTable {
     public static void main(String[] args) {
