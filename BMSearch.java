@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 /**Searches for a string pattern in a text file and outputs each line that the string occurs on to the standard output
  * @author Dolf ten Have
- * SID: 1617266
+ * SID: 1617266, [your SID]
  * Date: 09/05/2024
  */
 public class BMSearch {
@@ -48,7 +48,6 @@ public class BMSearch {
         }
         return file;
     }
-
 
     /**Parses the file of skip table into a usable format for the pattern search funtions
      * @param skipFile the file containing the skip table
@@ -119,7 +118,7 @@ public class BMSearch {
         System.out.println(line);
     }
 
-
+    /**************************Remove before release *************************************/
 
     /**
      * A debug function that prints the current pattern to look for to the standard output
@@ -131,97 +130,4 @@ public class BMSearch {
         }
         System.out.println("'");
     }
-
-    // /**
-    //  * Checks if the strings match
-    //  * @param line the line of text
-    //  * @param patternIndex the current index of the pattern
-    //  * @param index the index of the line
-    //  * @return True if the strings match
-    //  */
-    // private static boolean tryMatch(int patternIndex, int index){
-    //     if(pattern[patternIndex].compareTo(line.substring(index, index)) == 0){
-    //         return true;
-    //     }
-    //     return false;  
-    // }
-
-    // /**
-    //  * Creates a skip array from a file
-    //  * @param skipFile the file containing the skip array
-    //  * @return a skip array
-    //  */
-    // private static String[][] OldmakeSkipArray(File skipFile){
-    //     List<String[]> skipArrayList = new ArrayList<String[]>();
-    //     //Splits each line into an array and adds that to the array list
-    //     try{
-    //         Scanner sc = new Scanner(skipFile);
-    //         while(sc.hasNext()){
-    //             skipArrayList.add(sc.nextLine().split(","));
-    //         }
-    //     }catch(Exception e){
-    //         System.err.println("Error: There was a problem creating the skip array");
-    //         e.printStackTrace(System.err);
-    //         System.exit(1);
-    //     }
-    //     //Copys the array list into a 2D array
-    //     int rowLength = skipArrayList.get(0).length;
-    //     int numRows = skipArrayList.size();
-    //     skipArray = new String[rowLength][numRows];
-    //     for(int i = 0; i < numRows; i++){
-    //         for(int j = 0; j < rowLength; j++){
-    //             skipArray[j][i] = skipArrayList.get(i)[j];
-    //         }
-    //     }
-    //     return skipArray;
-    // }
-
-    // /**
-    //  * Reads each line of the text into a string
-    //  * @param text the text file
-    //  */
-    // private static void readText(File text){
-    //     String line;
-    //     try{
-    //         Scanner sc = new Scanner(text);
-    //         while(sc.hasNext()){
-    //             line = sc.nextLine();
-    //             //Checks that the line is at least the length of the pattern
-    //             if(line.length() > skipArray.length)
-    //                 findPattern(line, skipArray.length);
-    //         }
-    //         sc.close();
-    //     }catch(Exception e){
-    //         System.err.println("Error: There was a problem reading the text file '" + text.toPath() + "'.");
-    //         e.printStackTrace(System.err);
-    //     }
-    // }
-
-    // /**
-    //  * Prints the content of a 2d array to the standard output
-    //  * @param sArray the 2d Array
-    //  */
-    // private static void printSkipArray(String[][] sArray){
-    //     for(int i = 0; i < sArray.length; i++){
-    //         for(int j = 0; j < sArray[i].length; j++){
-    //             System.out.print(sArray[j][i]);
-    //         }
-    //         System.out.println("");
-    //     }
-    // }
-
-    // private static int getNumLines(File file){
-    //     int lines = 0;
-    //     try{      
-    //         LineNumberReader lnr = new LineNumberReader(new FileReader(file));
-    //         lnr.skip(Long.MAX_VALUE);
-    //         lines = lnr.getLineNumber();
-    //         lnr.close();
-    //     }catch(Exception e){
-    //         System.err.println("Error: There was a problem creating the skip array");
-    //         e.printStackTrace(System.err);
-    //         System.exit(1);
-    //     }
-    //     return lines;
-    // }
 }
