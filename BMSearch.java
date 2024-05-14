@@ -101,7 +101,7 @@ public class BMSearch {
      */
     private static void findPattern(int index){
         //If the end of the line is reaches, return
-        if(index >= (line.length() - 1) - (pattern.length - 2))
+        if(index > (line.length() - 1) - (pattern.length - 2))
             return;
         //compares each letter in the pattern to the letters in the line from the current index
         for(int i = pattern.length - 2; i >= 0; i--){
