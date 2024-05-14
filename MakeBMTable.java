@@ -8,19 +8,18 @@ import java.util.stream.Collectors;
 
 /**
  * This program computes the boyer moore skip array by calculating the shift
- * values for every character in the String. It evaluates the following using
- * these scenarios:
- * 1. when character does not match, check if there is a similar character in pattern
- * 1.a. similar pattern is found, output number of shifts to position of pattern
- * 1.b. if no similar pattern, then output character length
- * 2. when character matches, output 0
+ * values for every character in the String. It evaluates the following through these scenarios:
+ * 1. when character does not match, check if there is a similar character/suffix in pattern
+ * 1.a. similar character/suffix is found, output number of shifts to position of pattern
+ * 1.b. if no similar character/suffix, then output character length
+ * 2. when character matches, output 0 for shift value
  * 
  * Code used for java streams referenced from:
  * https://stackoverflow.com/questions/54671799/how-to-sort-and-eliminate-the-duplicates-from-arraylist/54671928
  * 
  * @author: Samuel Tan
  * Student ID: 1617175, 1617266
- * Date: 
+ * Date: 13/05/2024
  */
 public class MakeBMTable {
     public static void main(String[] args) {
@@ -28,10 +27,15 @@ public class MakeBMTable {
             System.err.println("Usage: java MakeBMTable <pattern> <outputFile>");
             System.exit(1);
         }
-
-        // place arguments into variables
         String pattern = args[0];
         String outputFile = args[1];
+        
+         //error if pattern is an empty string
+         if (pattern.isEmpty()){
+            System.err.println("Empty string is not valid...");
+            System.exit(1);
+        }
+
         try {
             File file = new File(outputFile);
             PrintWriter writer = new PrintWriter(file, "UTF-8");
@@ -49,7 +53,7 @@ public class MakeBMTable {
                     .collect(Collectors.toList());
             uniqueChars.add('*');
 
-            // deque for row used as we are inserting to the front of the queue
+            // deque for row used as we are inserting to the front of a row
             Deque<Integer> row = new ArrayDeque<>();
             StringBuilder suffixValues = new StringBuilder();
 
@@ -58,15 +62,14 @@ public class MakeBMTable {
                 for (int j = pattern.length() - 1; j >= 0; j--) {
                     // check if character in row does not matches
                     if (uniqueChars.get(i) != pattern.charAt(j)) {
-                        // check if there is a pattern/character in row that matches the character(and the suffix if it has one)
+                        // check if there is a pattern in the string that matches the character(and the suffix if it has one)
                         StringBuilder patternToBeMatched = new StringBuilder(suffixValues);
                         patternToBeMatched.insert(0, uniqueChars.get(i)); // add the char
 
                         // for every iteration, shift suffix to the left, comparing it with the pattern
                         for (int k = pattern.length(); k > 0; k--) {
                             // check if suffix matches the pattern at index k
-                            if (pattern.substring(k - patternToBeMatched.length(), k)
-                                    .equals(patternToBeMatched.toString())) {
+                            if (pattern.substring(k - patternToBeMatched.length(), k).equals(patternToBeMatched.toString())) {
                                 // if so, the shiftValue is the difference between pattern length and k(count of left shifts made)
                                 row.push(pattern.length() - k);
                                 break;
@@ -88,7 +91,7 @@ public class MakeBMTable {
                         row.push(0);
                     }
 
-                    // insert the character into suffix
+                    // insert the character into suffix for next iteration
                     suffixValues.insert(0, pattern.charAt(j));
                 }
                 writer.println();
@@ -96,7 +99,7 @@ public class MakeBMTable {
                 // using java streams, print formatted row
                 writer.print(row.stream().map(Object::toString).collect(Collectors.joining(",")));
                 row.clear();
-                // clear suffix values
+                // clear suffix values for next row
                 suffixValues.setLength(0);
             }
             writer.flush();

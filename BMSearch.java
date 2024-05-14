@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 /**Searches for a string pattern in a text file and outputs each line that the string occurs on to the standard output
  * @author Dolf ten Have
- * SID: 1617266, [your SID]
+ * SID: 1617266, 1617175
  * Date: 09/05/2024
  */
 public class BMSearch {
