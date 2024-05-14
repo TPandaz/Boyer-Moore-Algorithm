@@ -9,3 +9,10 @@ Note: The character '\*' represents any character that is not present in the pat
 Example Usage: java MakeBMTable "kokako" table.txt
 
 #### BMSearch.java
+The class takes a skip table made with MakeBMTable and a text file that will be searched in for the pattern.
+
+Each line of the text file containing the pattern is output to the standard output.
+
+The class first parses the skip table before searching the the file line by line for a match to the pattern using the Boyer-Moore technique.
+
+Example Usage: java BMSearch table.txt kokako.txt
