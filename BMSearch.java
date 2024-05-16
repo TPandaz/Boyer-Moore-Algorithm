@@ -59,7 +59,6 @@ public class BMSearch {
         try{
             Scanner sc = new Scanner(skipFile);
             pattern = sc.nextLine().split(","); //Gets pattern minus the first character
-            //printPattern();
             //Creates a new line in the hashmap for each line in the skip array file. The letter becomes the key and the the numbers an int array
             while(sc.hasNext()){
                 line = sc.nextLine().split(",");
@@ -106,26 +105,13 @@ public class BMSearch {
         //compares each letter in the pattern to the letters in the line from the current index
         for(int i = pattern.length - 2; i >= 0; i--){
             String s = line.substring(index + i, index + i + 1);
-            //System.out.printf("Comparing '%s' to '%s'", s, pattern[i + 1]);
             //If there is a missmatch then the the next function is called
             if(pattern[i + 1].compareTo(s) != 0){
-                //int skipN = skipArray.get(s) == null ? skipArray.get(pattern[0])[i - 1] : skipArray.get(s)[i - 1];
                 findPattern(index += skipArray.get(s) == null ? skipArray.get(pattern[0])[i] : skipArray.get(s)[i]);
                 return;
             }   
         }
         //A match is found so the line is printed and the method returns
         System.out.println(line);
-    }
-    
-    /**
-     * A debug function that prints the current pattern to look for to the standard output
-     */
-    private static void printPattern(){
-        System.out.print("Searching for '");
-        for(int i = 1; i < pattern.length; i++){
-            System.out.print(pattern[i]);
-        }
-        System.out.println("'");
     }
 }

@@ -60,7 +60,7 @@ public class MakeBMTable {
             // for every row in column
             for (int i = 0; i < uniqueChars.size(); i++) {
                 for (int j = pattern.length() - 1; j >= 0; j--) {
-                    // check if character in row does not matches
+                    // check if character in row does not match
                     if (uniqueChars.get(i) != pattern.charAt(j)) {
                         // check if there is a pattern in the string that matches the character(and the suffix if it has one)
                         StringBuilder patternToBeMatched = new StringBuilder(suffixValues);
